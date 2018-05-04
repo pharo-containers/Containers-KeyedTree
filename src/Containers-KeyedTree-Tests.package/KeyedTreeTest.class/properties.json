@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "TestCase",
+	"category" : "Containers-KeyedTree-Tests",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"tree",
+		"firstLevelOneSubTree"
+	],
+	"name" : "KeyedTreeTest",
+	"type" : "normal"
+}
