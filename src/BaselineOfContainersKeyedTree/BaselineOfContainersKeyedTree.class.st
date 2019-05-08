@@ -1,11 +1,11 @@
 Class {
-	#name : #BaselineOfKeyedTree,
+	#name : #BaselineOfContainersKeyedTree,
 	#superclass : #BaselineOf,
 	#category : #BaselineOfContainersKeyedTree
 }
 
 { #category : #baselines }
-BaselineOfKeyedTree >> baseline: spec [
+BaselineOfContainersKeyedTree >> baseline: spec [
 	<baseline>
 
 	spec for: #pharo do: [		
