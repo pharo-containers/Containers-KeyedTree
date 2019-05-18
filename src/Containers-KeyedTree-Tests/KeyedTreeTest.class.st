@@ -11,9 +11,9 @@ Class {
 	#category : 'Containers-KeyedTree-Tests'
 }
 
-{ #category : #'tests - at' }
+{ #category : #running }
 KeyedTreeTest >> setUp [
-	
+	super setUp.
 	firstLevelOneSubTree := KeyedTree new
 				at: #two put: 'One-Two';
 				at: #three put: 'One-Three';
@@ -40,6 +40,31 @@ KeyedTreeTest >> t2 [
 				at: 2 put: '1-2';
 				at: 3 put: (self t13);
 				yourself
+]
+
+{ #category : #'tests - operation' }
+KeyedTreeTest >> t2AB [
+
+	^ KeyedTree new
+				at: 1 put: '1-1';
+				at: 2 put: '1-2';
+				at: 3 put: (self tAB);
+				yourself
+]
+
+{ #category : #'tests - operation' }
+KeyedTreeTest >> tAB [
+	^ KeyedTree new
+		at: #A put: '1-3-1';
+		at: #B put: '1-3-2';
+		yourself
+]
+
+{ #category : #'tests - operation' }
+KeyedTreeTest >> testAllKeys [
+	
+	self assert: self t13 allKeys asArray equals: #(1 2).
+	self assert: self t2AB allKeys asArray equals: #(1 2 3 #A #B).
 ]
 
 { #category : #'tests - at' }
