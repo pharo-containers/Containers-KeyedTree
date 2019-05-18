@@ -158,6 +158,22 @@ KeyedTreeTest >> testCopy [
 ]
 
 { #category : #'tests - operation' }
+KeyedTreeTest >> testFormattedText [
+	
+	self assert: self t13 formattedText equals: 
+'1 : ''1-3-1''
+2 : ''1-3-2''
+'.
+	self assert: self t2AB formattedText equals: 
+'1 : ''1-1''
+2 : ''1-2''
+3
+  #A : ''1-3-1''
+  #B : ''1-3-2''
+'
+]
+
+{ #category : #'tests - operation' }
 KeyedTreeTest >> testMerge [
 	"Test the merge method for success and failure modes."
 

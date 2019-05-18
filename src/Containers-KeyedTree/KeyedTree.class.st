@@ -99,22 +99,10 @@ KeyedTree >> atPath: anArray put: aBlock [
 KeyedTree >> formattedText [
 	"Answer a string or text representing the receiver with indentation and, possibly, markup."
 
-	|str|
-	str := String new writeStream.
-	self putFormattedTextOn: str level: 0 indentString: '  '.
-	^str contents
-]
-
-{ #category : #printing }
-KeyedTree >> formattedTextWithDescriptions: aKeyedTree [
-	"Answer a string or text representing the receiver with indentation and, possibly, markup.
-	Descriptions of each item are taken from the given tree with
-	the same key structure as the receiver."
 	
-	|str|
-	str := String new writeStream.
-	self putFormattedTextOn: str withDescriptions: aKeyedTree level: 0 indentString: '  '.
-	^str contents
+	^ String new writeStreamDo: [ :str | 
+				self putFormattedTextOn: str level: 0 indentString: '  '.
+				str contents ]
 ]
 
 { #category : #adding }
@@ -134,8 +122,7 @@ KeyedTree >> merge: aKeyedTree [
 
 { #category : #copying }
 KeyedTree >> postCopy [
-	"Must copy the associations, or later store will affect both the
-		original and the copy.
+	"Must copy the associations, or later store will affect both the original and the copy.
 	Copy any subtrees too!"
 
 	array := array collect: [:assoc |
@@ -162,30 +149,6 @@ KeyedTree >> putFormattedTextOn: aStream level: indentLevel indentString: aStrin
 			ifFalse: [aStream
 						nextPutAll: ' : ';
 						nextPutAll: v printString.
-					aStream cr]]
-]
-
-{ #category : #printing }
-KeyedTree >> putFormattedTextOn: aStream withDescriptions: aKeyedTree level: indentLevel indentString: aString [
-	"Place a print of the receiver and associated description on the given stream with the given indentation level."
-
-	
-	(self keys asSortedCollection: self sortBlock) do: [:k | | v |
-		indentLevel timesRepeat: [aStream nextPutAll: aString].
-		aStream nextPutAll: k printString.
-		v := self at: k.
-		(v isKindOf: self class)
-			ifTrue: [aStream cr.
-					v
-						putFormattedTextOn: aStream
-						withDescriptions: (aKeyedTree at: k ifAbsent: [self class new])
-						level: indentLevel + 1
-						indentString: aString]
-			ifFalse: [aStream
-						nextPutAll: ' : ';
-						nextPutAll: v printString;
-						tab; tab;
-						nextPutAll: (aKeyedTree at: k ifAbsent: ['nondescript']) printString.
 					aStream cr]]
 ]
 
