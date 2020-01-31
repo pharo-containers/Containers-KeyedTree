@@ -50,6 +50,6 @@ Add the following code to your Metacello baseline or configuration
 
 ```
 spec 
-   baseline: 'ContainersStack' 
-   with: [ spec repository: 'github://Ducasse/Containers-Stack/src' ]
+   baseline: 'ContainersKeyedTree' 
+   with: [ spec repository: 'github://Ducasse/Containers-KeyedTree/src' ]
 ```
