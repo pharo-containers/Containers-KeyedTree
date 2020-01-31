@@ -8,15 +8,7 @@ An implementation of KeyedTree
 [![Pharo version](https://img.shields.io/badge/Pharo-8.0-%23aac9ff.svg)](https://pharo.org/download)
 <!-- [![Build status](https://ci.appveyor.com/api/projects/status/1wdnjvmlxfbml8qo?svg=true)](https://ci.appveyor.com/project/olekscode/dataframe)  -->
 
-## Install
-To install this project, run the following script in a playground:
 
-```st
-Metacello new
-	baseline: 'ContainersKeyedTree';
-	repository: 'github://Ducasse/Containers-KeyedTree/src';
-	load.
-```
 
 ## Example
 To have an overview of the features this datastructure provide, have a look at the following code snippet (extracted from a unit test):
@@ -39,4 +31,25 @@ self assert: (tree atPath: #(2)) equals: 'Two'.
 self should: [ tree atPath: #(2 4) ] raise: self defaultTestError.
 self should: [ tree atPath: #(1 two three) ] raise: self defaultTestError.
 self should: [ tree atPath: #(3) ] raise: self defaultTestError
+```
+
+## Loading
+
+The following script installs Containers-Stack in Pharo.
+
+```st
+Metacello new
+	baseline: 'ContainersKeyedTree';
+	repository: 'github://Ducasse/Containers-KeyedTree/src';
+	load.
+```
+
+## If you want to depend on it
+
+Add the following code to your Metacello baseline or configuration
+
+```
+spec 
+   baseline: 'ContainersStack' 
+   with: [ spec repository: 'github://Ducasse/Containers-Stack/src' ]
 ```
