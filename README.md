@@ -40,7 +40,7 @@ The following script installs Containers-Stack in Pharo.
 ```st
 Metacello new
 	baseline: 'ContainersKeyedTree';
-	repository: 'github://Ducasse/Containers-KeyedTree:v1.0/src';
+	repository: 'github://pharo-containers/Containers-KeyedTree:v1.0/src';
 	load.
 ```
 
@@ -51,5 +51,5 @@ Add the following code to your Metacello baseline or configuration
 ```
 spec 
    baseline: 'ContainersKeyedTree' 
-   with: [ spec repository: 'github://Ducasse/Containers-KeyedTree:v1.0/src' ]
+   with: [ spec repository: 'github://pharo-containers/Containers-KeyedTree:v1.0/src' ]
 ```
