@@ -54,10 +54,12 @@ CTKeyedTree >> atPath: anArray [
 
 { #category : #accessing }
 CTKeyedTree >> atPath: anArray ifAbsent: aBlock [
-	"Answer the element referenced by the given key path. Answer the value of aBlock if not found."
 	| element |
 	element := self.
-	anArray do: [ :key | element := element at: key ifAbsent: [ ^aBlock value ] ].
+	anArray do: [ :key | 
+		(element isKindOf: self class)
+			ifTrue: [ element := element at: key ifAbsent: [ ^aBlock value ] ]
+			ifFalse: [ ^aBlock value ] ].
 	^ element
 ]
 
@@ -117,15 +119,25 @@ CTKeyedTree >> postCopy [
 
 { #category : #printing }
 CTKeyedTree >> putFormattedTextOn: aStream level: indentLevel indentString: aString [
-	"Place a description of the receiver on the given stream with the given indentation level."
-	(self keys asSortedCollection: self sortBlock) do: [ :k | | v |
-		indentLevel timesRepeat: [ aStream nextPutAll: aString ].
-		aStream nextPutAll: k printString.
-		v := self at: k.
-		(v isKindOf: self class)
-			ifTrue: [ aStream cr.
+	"Write a textual representation of the receiver to aStream, indenting to indentLevel using aString as the indent string."
+
+	(self keys asSortedCollection: self sortBlock)
+		do: [ :k | 
+			| v |
+			indentLevel = 0
+				ifFalse: [ 
+					indentLevel = 1
+						ifTrue: [ aStream nextPutAll: aString ]
+						ifFalse: [ indentLevel - 1 timesRepeat: [ aStream nextPutAll: aString ]. aStream nextPutAll: '  ' ] ].
+			aStream nextPutAll: k printString.
+			v := self at: k.
+			(v isKindOf: self class)
+				ifTrue: [ aStream cr.
 					v putFormattedTextOn: aStream level: indentLevel + 1 indentString: aString ]
-			ifFalse: [ aStream nextPutAll: ' : '; nextPutAll: v printString. aStream cr ] ]
+				ifFalse: [ aStream
+						nextPutAll: ' : ';
+						nextPutAll: v printString.
+					aStream cr ] ]
 ]
 
 { #category : #removing }
@@ -146,12 +158,32 @@ CTKeyedTree >> removePath: anArray ifAbsent: aBlock [
 
 { #category : #accessing }
 CTKeyedTree >> sortBlock [
-	"Answer the block to sort tree keys with."
-	^ [ :a :b | [ a <= b ] on: Error do: [ a class name <= b class name ] ]
+	"Answer a sort block that can be used to sort the keys of the receiver."
+
+	^ [ :a :b | 
+		a class = b class 
+			ifTrue: [ a <= b ]
+			ifFalse: [ 
+				(a isSymbol and: [ b isNumber ]) 
+					ifTrue: [ true ] 
+					ifFalse: [ 
+						(b isSymbol and: [ a isNumber ]) 
+							ifTrue: [ false ] 
+							ifFalse: [ a class name <= b class name ] ] ] ]
 ]
 
 { #category : #accessing }
 CTKeyedTree >> subtrees [
 	"Answer the subtrees of the receiver."
 	^ (self select: [ :v | v isKindOf: CTKeyedTree ]) values
+]
+
+{ #category : #tests }
+CTKeyedTreeTest >> testFormattedText [
+	"Test the formatted text representation of the tree."
+
+	self assert: self t13 formattedText equals:
+		'1 : ''1-3-1''
+2 : ''1-3-2''
+'
 ]

@@ -89,15 +89,17 @@ CTKeyedTreeTest >> testAtPathEmpty [
 	self should: [ emptyTree atPath: #(1) ] raise: self defaultTestError.
 ]
 
-{ #category : #'tests - at' }
+{ #category : #tests }
 CTKeyedTreeTest >> testAtPathIfAbsent [
+	"Test accessing elements using a path with an ifAbsent: block."
+
 	self assert: (tree atPath: #(1) ifAbsent: [ #missing ]) equals: firstLevelOneSubTree.
 	self assert: (tree atPath: #(1 two) ifAbsent: [ #missing ]) equals: 'One-Two'.
 	self assert: (tree atPath: #(1 three) ifAbsent: [ #missing ]) equals: 'One-Three'.
 	self assert: (tree atPath: #(2) ifAbsent: [ #missing ]) equals: 'Two'.
 	self assert: (tree atPath: #(2 4) ifAbsent: [ #missing ]) equals: #missing.
 	self assert: (tree atPath: #(1 two three) ifAbsent: [ #missing ]) equals: #missing.
-	self assert: (tree atPath: #(3) ifAbsent: [ #missing ]) equals: #missing.
+	self assert: (tree atPath: #(3) ifAbsent: [ #missing ]) equals: #missing
 ]
 
 { #category : #'tests - at' }
@@ -206,17 +208,21 @@ CTKeyedTreeTest >> testPostCopy [
 	self deny: (copy at: 1) == subTree.
 ]
 
-{ #category : #'tests - printing' }
+{ #category : #tests }
 CTKeyedTreeTest >> testPutFormattedTextOnLevelIndentString [
+	"Test formatted text output with a custom indent string."
+
 	| stream |
 	stream := String new writeStream.
 	tree putFormattedTextOn: stream level: 1 indentString: '>>'.
-	self assert: stream contents equals: 
-'>>1
+	self
+		assert: stream contents
+		equals:
+			'>>1
 >>  #three : ''One-Three''
 >>  #two : ''One-Two''
 >>2 : ''Two''
-'.
+'
 ]
 
 { #category : #'tests - removing' }
@@ -239,8 +245,10 @@ CTKeyedTreeTest >> testRemovePathIfAbsent [
 	self assert: (tree atPath: #(2) ifAbsent: [ #missing ]) equals: #missing.
 ]
 
-{ #category : #'tests - operation' }
+{ #category : #tests }
 CTKeyedTreeTest >> testSortBlock [
+	"Test the sort block for keys."
+
 	| treeWithMixedKeys sortedKeys |
 	treeWithMixedKeys := CTKeyedTree new
 		at: 2 put: 'Two';
@@ -248,7 +256,7 @@ CTKeyedTreeTest >> testSortBlock [
 		at: 1 put: 'One';
 		yourself.
 	sortedKeys := treeWithMixedKeys keys asSortedCollection: treeWithMixedKeys sortBlock.
-	self assert: sortedKeys asArray equals: #(1 2 #a).
+	self assert: sortedKeys asArray equals: #(#a 1 2)
 ]
 
 { #category : #'tests - operation' }
