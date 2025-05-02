@@ -14,12 +14,12 @@ An implementation of KeyedTree
 To have an overview of the features this datastructure provide, have a look at the following code snippet (extracted from a unit test):
 
 ```st
-firstLevelOneSubTree := KeyedTree new.
+firstLevelOneSubTree := CTKeyedTree new.
 firstLevelOneSubTree
 	at: #two put: 'One-Two';
 	at: #three put: 'One-Three'.
 	
-tree := KeyedTree new.
+tree := CTKeyedTree new.
 tree
 	at: 1 put: firstLevelOneSubTree;
 	at: 2 put: 'Two'.
