@@ -1,5 +1,9 @@
 "
-SUnit tests for CTKeyedTree
+I test the KeyedTree implementation (CTKeyedTree).
+
+I verify correctness of all tree operations including path-based access, tree merging, collection protocol methods, and edge cases like empty trees, invalid paths, and complex hierarchical structures.
+
+I ensure the KeyedTree maintains proper hierarchical structure and handles various data types correctly.
 "
 Class {
 	#name : 'CTKeyedTreeTest',
