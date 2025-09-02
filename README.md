@@ -1,55 +1,110 @@
 # Containers-KeyedTree
-An implementation of KeyedTree
+A hierarchical data structure that provides path-based access to nested elements with dictionary-like functionality. Perfect for configuration management, file system structures & hierarchical data organization.
 
-[![Build Status](https://travis-ci.com/Ducasse/Containers-KeyedTree.svg?branch=master)](https://travis-ci.com/Ducasse/Containers-KeyedTree)
-[![Coverage Status](https://coveralls.io/repos/github//Ducasse/Containers-KeyedTree/badge.svg?branch=master)](https://coveralls.io/github//Ducasse/Containers-KeyedTree?branch=master)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)]()
-[![Pharo version](https://img.shields.io/badge/Pharo-7.0-%23aac9ff.svg)](https://pharo.org/download)
-[![Pharo version](https://img.shields.io/badge/Pharo-8.0-%23aac9ff.svg)](https://pharo.org/download)
-<!-- [![Build status](https://ci.appveyor.com/api/projects/status/1wdnjvmlxfbml8qo?svg=true)](https://ci.appveyor.com/project/olekscode/dataframe)  -->
+![Pharo Version](https://img.shields.io/badge/Pharo-10+-blue)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+## What is a KeyedTree?
+A KeyedTree is a specialized dictionary that allows nested structures where values can be accessed through path-based keys. Each node can contain both direct values and subtrees, enabling hierarchical data organization similar to file systems or nested configurations.
 
+## Loading 
+The following script installs Containers-KeyedTree in Pharo.
 
-## Example
-To have an overview of the features this datastructure provide, have a look at the following code snippet (extracted from a unit test):
-
-```st
-firstLevelOneSubTree := CTKeyedTree new.
-firstLevelOneSubTree
-	at: #two put: 'One-Two';
-	at: #three put: 'One-Three'.
-	
-tree := CTKeyedTree new.
-tree
-	at: 1 put: firstLevelOneSubTree;
-	at: 2 put: 'Two'.
-	
-self assert: (tree atPath: #(1)) equals: firstLevelOneSubTree.
-self assert: (tree atPath: #(1 two)) equals: 'One-Two'.
-self assert: (tree atPath: #(1 three)) equals: 'One-Three'.
-self assert: (tree atPath: #(2)) equals: 'Two'.
-self should: [ tree atPath: #(2 4) ] raise: self defaultTestError.
-self should: [ tree atPath: #(1 two three) ] raise: self defaultTestError.
-self should: [ tree atPath: #(3) ] raise: self defaultTestError
-```
-
-## Loading
-
-The following script installs Containers-Stack in Pharo.
-
-```st
+```smalltalk
 Metacello new
-	baseline: 'ContainersKeyedTree';
-	repository: 'github://pharo-containers/Containers-KeyedTree:v1.0/src';
-	load.
+  baseline: 'ContainersKeyedTree';
+  repository: 'github://pharo-containers/Containers-KeyedTree/src';
+  load.
 ```
 
-## If you want to depend on it
+## If you want to depend on it 
+Add the following code to your Metacello baseline or configuration:
 
-Add the following code to your Metacello baseline or configuration
-
-```
+```smalltalk
 spec 
    baseline: 'ContainersKeyedTree' 
-   with: [ spec repository: 'github://pharo-containers/Containers-KeyedTree:v1.0/src' ]
+   with: [ spec repository: 'github://pharo-containers/Containers-KeyedTree/src' ].
 ```
+
+## Why use Containers-KeyedTree?
+
+KeyedTrees solve the problem of **organizing hierarchical data with efficient path-based access**. Perfect for configuration files, menu systems, and any data that naturally forms a tree structure.
+
+### Key Benefits
+- **Hierarchical Organization**: Natural tree structure for nested data
+- **Path-based Access**: Access deep elements with simple path arrays
+- **Flexible Values**: Store any object type at any level
+- **Merge Capability**: Combine trees intelligently
+- **Dictionary Compatibility**: Inherits from Dictionary for familiar API
+
+## Basic Usage
+
+```smalltalk
+"Create a hierarchical structure"
+tree := CTKeyedTree new.
+
+"Add simple values"
+tree at: #name put: 'MyApp'.
+tree at: #version put: '1.0.0'.
+
+"Create nested structures"
+config := CTKeyedTree new.
+config at: #host put: 'localhost'.
+config at: #port put: 8080.
+tree at: #server put: config.
+
+"Access with paths"
+tree atPath: #(server host). "=> 'localhost'"
+tree atPath: #(server port). "=> 8080"
+tree atPath: #(version).     "=> '1.0.0'"
+```
+
+## Real-World Use Cases
+
+```smalltalk
+"Build a hierarchical menu structure for GUI Applications"
+mainMenu := CTKeyedTree new.
+
+"File menu"
+fileMenu := CTKeyedTree new
+    at: #new put: 'Create New Document';
+    at: #open put: 'Open Document';
+    at: #recent put: (CTKeyedTree new
+        at: #doc1 put: '/path/to/recent1.txt';
+        at: #doc2 put: '/path/to/recent2.txt';
+        yourself);
+    at: #save put: 'Save Document';
+    at: #exit put: 'Exit Application';
+    yourself.
+
+"Edit menu"
+editMenu := CTKeyedTree new
+    at: #undo put: 'Undo Last Action';
+    at: #redo put: 'Redo Last Action';
+    at: #copy put: 'Copy Selection';
+    at: #paste put: 'Paste Content';
+    yourself.
+
+"Tools menu with nested submenus"
+toolsMenu := CTKeyedTree new
+    at: #preferences put: (CTKeyedTree new
+        at: #general put: 'General Settings';
+        at: #appearance put: 'Theme & UI';
+        at: #shortcuts put: 'Keyboard Shortcuts';
+        yourself);
+    at: #plugins put: 'Manage Plugins';
+    yourself.
+
+mainMenu 
+    at: #file put: fileMenu;
+    at: #edit put: editMenu;
+    at: #tools put: toolsMenu.
+
+"Access menu items by path"
+newAction := mainMenu atPath: #(file new).          "=> 'Create New Document'"
+recentDoc := mainMenu atPath: #(file recent doc1).  "=> '/path/to/recent1.txt'"
+themeSettings := mainMenu atPath: #(tools preferences appearance). "=> 'Theme & UI'"
+```
+
+## Contributing
+This is part of the Pharo Containers project. Feel free to contribute by implementing additional methods, improving tests, or enhancing documentation.
