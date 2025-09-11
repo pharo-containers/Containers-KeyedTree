@@ -1,1 +1,1 @@
-Package { #name : #'Containers-KeyedTree-Tests' }
+Package { #name : 'Containers-KeyedTree-Tests' }

@@ -1,14 +1,17 @@
 Class {
-	#name : #BaselineOfContainersKeyedTree,
-	#superclass : #BaselineOf,
-	#category : #BaselineOfContainersKeyedTree
+	#name : 'BaselineOfContainersKeyedTree',
+	#superclass : 'BaselineOf',
+	#category : 'BaselineOfContainersKeyedTree',
+	#package : 'BaselineOfContainersKeyedTree'
 }
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfContainersKeyedTree >> baseline: spec [
+
 	<baseline>
-	spec for: #pharo do: [		
-		spec package: 'Containers-KeyedTree'.
-		spec package: 'Containers-KeyedTree-Tests' with: [ spec requires: #('Containers-KeyedTree') ]
-	]
+    spec for: #common do: [
+            spec package: 'Containers-KeyedTree'.
+            spec
+                package: 'Containers-KeyedTree-Tests'
+                with: [ spec requires: #( 'Containers-KeyedTree' ) ] ]
 ]
