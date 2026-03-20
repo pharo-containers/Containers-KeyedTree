@@ -268,21 +268,6 @@ CTKeyedTree >> collect: aBlock [
 	^ result
 ]
 
-{ #category : 'copying' }
-CTKeyedTree >> copy [
-
-		"Answer a deep copy of the receiver including all subtrees."
-	
-	| result |
-	result := self species new.
-	self keysAndValuesDo: [ :key :value |
-		result at: key put: (
-			(value isKindOf: self class)
-				ifTrue: [ value copy ]
-				ifFalse: [ value ] ) ].
-	^ result
-]
-
 { #category : 'accessing' }
 CTKeyedTree >> depth [
 
@@ -496,16 +481,10 @@ CTKeyedTree >> pathsAndValuesDo: aBlock currentPath: pathArray [
 
 { #category : 'copying' }
 CTKeyedTree >> postCopy [
-
-	"Ensure proper deep copying of associations and subtrees."
 	
-	array := array collect: [ :assoc |
-		assoc ifNotNil: [ 
-			Association
-				key: assoc key
-				value: ((assoc value isKindOf: self class)
-					ifTrue: [ assoc value copy ]
-					ifFalse: [ assoc value ]) ] ]
+	super postCopy.
+	self keysAndValuesDo: [ :key :value |
+		self at: key put: value copy ]
 ]
 
 { #category : 'printing' }
